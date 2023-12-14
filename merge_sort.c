@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <time.h>
 
-void randarr(int arr[], int length, int max){ /*funzione randarr che prende in ingresso l'array e ci inserisce numeri casuali dati dalla funzione rand con seed 13*/
+void randarr(int arr[], int length, int seed){ /*funzione randarr che prende in ingresso l'array e ci inserisce numeri casuali dati dalla funzione rand con seed 13*/
     
-    int i, j;
+    int i;
+    srand(seed);
     for(i=0;i<length;i++){ /*ciclo for per assegnare ad ogni elemento dell'array un valore casuale*/
-        arr[i]=rand()%max; /*ad arr[i] assegno un valore casuale compreso tra 0 e max*/
+        arr[i]=rand(); /*ad arr[i] assegno un valore casuale compreso tra 0 e max*/
 	}
 }
 
@@ -63,29 +64,35 @@ void merge_sort(int a[], int l, int r)  /*Esecuzione dell'algoritmo merge sort s
     }
 }
 
-int main()
-{
-    srand(13); /*srand con seed 13*/
-    
-	int length, max=1000000, t_start, t_end, t_elapsed, t_tot=0; /*variabili per la creazione dell'array e per il calcolo dei cicli di clock necessari per il sort*/
-    for(length=1; length <= 500; length++){
-	//printf("\nSize of array: %d", length);
-    
-	int randArray[length]; /*imposto la dimensione di randArray*/
-    
-    randarr(randArray, length, max); /*chiamo la funzione randarr*/
-
-    //int n = sizeof(randArray) / sizeof(randArray[0]); /*ad n assegno la dimensione dell'array non in byte, utile successivamente alla funzione insertion sort*/
-    
-	t_start = clock(); /*assegno a t_start i cicli di clock effettuati fino ad allora*/
-	merge_sort(randArray, 0, length - 1); /*chiamata ad merge sort*/
-	t_end = clock(); /*assegno a t_end i cicli di clock effettuati fino ad allora; chiaramente saranno di più di t_start perché nel mentre sono state effettuate delle istruzioni*/
-	t_elapsed = t_end - t_start; /*t_elapsed contiene la differenza fra t_end e t_start, in modo tale da avere il numero di cicli effettuati da insertion sort in questo porgramma*/
-	t_tot = t_tot + t_elapsed; /*t_tot accumula i cicli effettuati di volta in volta*/
-	printf("\n\nTime needed to sort %d elements: %d clock cycles\n", length, t_tot); /*printf per stampare a video i cicli di clock necessari a riordinare ogni array*/
+double single_experiment(int length, int max_instances, int seed) {
+    double t_start, t_end, t_elapsed, t_tot=0.0;
+    for(int i=1; i<=max_instances; i++) {
+        int array[length];
+        randarr(array, length, seed);
+        t_start=clock();
+        merge_sort(array, 0, length-1);
+        t_end=clock();
+        t_elapsed=t_end-t_start;
+        t_tot=t_tot+t_elapsed;
+        /*for(int j=0; j<length; j++) {
+            printf("%d ", array[j]);
+        }
+        printf("\n");*/
     }
+    return t_tot/max_instances;
+}
 
-    printf("\n");
+void experiment(int min_length, int max_length, int seed) {
+    int max_instances=30000, step=5;
+    for(int length=min_length; length<=max_length; length+=step) {
+        double time=single_experiment(length, max_instances, seed);
+        printf("Clock cycles: %d --- Elements: %d\n", time, length);
+        //printf("%f ", time);
+    }
+}
 
+int main() {
+    int seed=13, min_length=5, max_length=500;
+    experiment(min_length, max_length, seed);
     return 0;
 }
