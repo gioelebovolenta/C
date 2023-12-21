@@ -11,18 +11,18 @@ void randarr(int arr[], int length, int seed){ /*funzione randarr che prende in 
 	}
 }
 
-void insertionSort(int *arr, int n) /*funzione insertionSort che prende in ingresso l'array e la sua dimensione*/
+void insertion_sort(int arr[], int n) //funzione insertionSort che prende in ingresso l'array e la sua dimensione
 {
-	int i, key, j; /*svolgimento classico di insertion sort, con i, j e key che si occupano del riordinamento dell'array*/
-	for (i = 1; i < n; i++) { /*ciclo for per i che va da 1 alla dimensione dell'array incremento i di 1*/
-		key = arr[i]; /*key tiene traccia dell'elemento da comparare*/
-		j = i - 1; /*j è impostato a i-1 perché dobbiamo confrontare i con tutti gli elementi precedenti ad esso*/
+	int i, key, j; //svolgimento classico di insertion sort, con i, j e key che si occupano del riordinamento dell'array
+	for (i = 1; i < n; i++) { //ciclo for per i che va da 1 alla dimensione dell'array con incremento di 1
+		key = arr[i]; //key tiene traccia dell'elemento da comparare
+		j = i - 1; //j è impostato a i-1 perché dobbiamo confrontare i con tutti gli elementi precedenti ad esso
 
-		while (j >= 0 && arr[j] > key) { /*le condizioni del while sono che j>=0 per rimanere all'interno dell'array, e che l'elemento indicato da j sia più grande di key*/
-			arr[j + 1] = arr[j]; /*questo assegnamento serve a shiftare gli elementi più grandi di key*/
-			j = j - 1; /*j=j-1 serve a fare il check all'indietro di tutto l'array*/
+		while (j >= 0 && arr[j] > key) { //le condizioni del while sono che j>=0 per rimanere all'interno dell'array, e che l'elemento indicato da j sia più grande di key
+			arr[j + 1] = arr[j]; //questo assegnamento serve a shiftare gli elementi più grandi di key
+			j = j - 1; //j=j-1 serve a fare il check all'indietro di tutto l'array
 		}
-		arr[j + 1] = key;  /*inserisco finalmente key nel posto in cui deve stare in modo da ordinare l'array elemento per elemento*/
+		arr[j + 1] = key; //inserisco finalmente key nel posto in cui deve stare in modo da ordinare l'array elemento per elemento
 	}
 }
 
@@ -48,8 +48,8 @@ void experiment(int min_length, int max_length, int seed) {
     int max_instances=30000, step=5;
     for(int length=min_length; length<=max_length; length+=step) {
         double time=single_experiment(length, max_instances, seed);
-        printf("Clock cycles: %d --- Elements: %d\n", time, length);
-        //printf("%f ", time);
+        //printf("Clock cycles: %d --- Elements: %d\n", time, length);
+        printf("%f ", time);
     }
 }
 
