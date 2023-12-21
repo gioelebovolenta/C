@@ -21,43 +21,42 @@ void merge_sorted_arrays(int a[], int l, int m, int r) //unisce le due porzioni 
     
     int i, j, k; //usati come contatori per i tre array (a, temp_left, temp_right)
     
-    for (int i = 0; i < left_length; i++) //copia la porzione sinistra nell'array temp_left
-    temp_left[i] = a[l + i];
+    for (int i = 1; i < left_length; i++) //copia la porzione sinistra nell'array temp_left
+        temp_left[i] = a[l + i - 1];
     
-    for (int i = 0; i < right_length; i++) //copia la porzione destra nell'array temp_right
-    temp_right[i] = a[m + 1 + i];
+    for (int j = 1; j < right_length; j++) //copia la porzione destra nell'array temp_right
+        temp_right[j] = a[m + j];
     
-    for (i = 0, j = 0, k = l; k <= r; k++)   /* utilizzo l'indice i per muovermi all'interno di temp_left, j per muovermi all'interno di temp_right e k per
-                                                muovermi nella porzione dell'array a da l a r. In sostanza, sapendo che entrambi temp_left e temp_right sono ordinati,
-                                                controlliamo la testa dei due array temporanei e mettiamo il numero più piccolo tra i due nell'array a (usando i, j e k
-                                                per muoverci all'interno degli array). Quando terminano gli elementi in uno degli array temporanei, i restanti elementi
-                                                dell'altro array vengono copiati in a*/
-    {
-
-    if ((i < left_length) &&
-        (j >= right_length || temp_left[i] <= temp_right[j])) /*finché non abbiamo raggiunto la fine dell'array temp_left con la variabile i, e se l'elemento all'indice i
-                                                                di temp_left è <= all'elemento all'indice j di temp_right O se abbiamo raggiunto la fine dell'array temp_right,
-                                                                allora memorizziamo l'elemento presente all'indice i di temp_left nell'array a all'indice k*/
-    {
-        a[k] = temp_left[i];
-        i++;
+    i = 1; //inizializzo i e j
+    j = 1;
+    
+    for (k = l; k <= r; k++) {  //utilizzo una variabile di controllo k per muovermi all'interno dell'array dalla prima posizione utile all'ultima posizione utile
+        if (i <= left_length) { //se non sono arrivato a fine corsa con l'indice i
+            if (j <= right_length) { //e se non sono arrivato a fine corsa con l'indice j
+                if (temp_left[i] <= temp_right[j]) { //allora eseguo il confronto dei due elementi
+                    a[k] = temp_left[i]; //se l'elemento all'indice i è minore di quello ad indice j allora faccio la copia del primo in a[k]
+                    i++; //e incremento i
+                } else {
+                    a[k] = temp_right[j]; //altrimenti faccio la copia dell'elemento ad indice j in a[k]
+                    j++; //e incremento j
+                }
+            } else { //questo accade quando l'indice j è arrivato in fondo
+                a[k] = temp_left[i]; //copio i rimanenti elementi dell'array di sinistra in a[k]
+                i++;
+            }
+        } else { //questo accade quando l'indice i è arrivato in fondo
+            a[k] = temp_right[j]; //copio i rimanenti elementi dell'array di destra in a[k]
+            j++;
+        }
     }
-
-    else // altrimenti memorizziamo l'elemento presente all'indice j di temp_right nell'array a all'indice k
-    {
-        a[k] = temp_right[j];
-        j++;
-    }
-    }  
 }
 
-void merge_sort(int a[], int l, int r)  /*Esecuzione dell'algoritmo merge sort sull'array a tra l'indice sinistro l e l'indice destro r.
-                                                    Questa funzione implementa l'algoritmo ricorsivo di merge sort, che divide l'array nelle porzioni tra l ed r 
-                                                    e chiama se stesso in ciascuna porzione, prima di di unire le porzioni ordinate dell'array risultante.*/
-{
+void merge_sort(int a[], int l, int r) { /* Esecuzione dell'algoritmo merge sort sull'array a tra l'indice sinistro l e l'indice destro r.
+                                            Questa funzione implementa l'algoritmo ricorsivo di merge sort, che divide l'array nelle porzioni tra l ed r 
+                                            e chiama se stesso in ciascuna porzione, prima di di unire le porzioni ordinate dell'array risultante */
     if (l < r) //fermiamo la ricorsione quando l >= r
     {
-    int m = l + (r - l) / 2; //trovo il punto medio di l ed r
+    int m = (l+r)/2; //trovo il punto medio di l ed r
     merge_sort(a, l, m); //applico la funzione ricorsivamente alle porzioni sinistra e destra divise dal punto medio
     merge_sort(a, m + 1, r);
     merge_sorted_arrays(a, l, m, r); //a questo punto entrambe le porzioni dell'array sono state ordinate e possiamo quindi unirle
@@ -86,8 +85,8 @@ void experiment(int min_length, int max_length, int seed) {
     int max_instances=30000, step=5;
     for(int length=min_length; length<=max_length; length+=step) {
         double time=single_experiment(length, max_instances, seed);
-        printf("Clock cycles: %d --- Elements: %d\n", time, length);
-        //printf("%f ", time);
+        //printf("Clock cycles: %d --- Elements: %d\n", time, length);
+        printf("%f ", time);
     }
 }
 
