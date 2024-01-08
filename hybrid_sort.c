@@ -109,7 +109,9 @@ void hybrid_sort(int a[], int l, int r) { /*funzione hybrid sort che utilizza in
     }
 }
 
-double single_experiment(int length, int max_instances, int seed) {
+double single_experiment(int length, int max_instances, int seed) { /*single experiment riproduce l'ordinamento degli array in base all'algoritmo
+                                                                    di ordinamento selezionato. Vengono utilizzati i cicli di clock per poter comparare
+                                                                    la durata effettiva dei vari ordinamenti e delle variabili di controllo per poterli calcolare*/
     double t_start, t_end, t_elapsed, t_tot=0.0;
     for(int i=1; i<=max_instances; i++) {
         int array[length];
