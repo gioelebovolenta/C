@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
-void randarr(int arr[], int length, int seed){ /*funzione randarr che prende in ingresso l'array e ci inserisce numeri casuali dati dalla funzione rand con seed 13*/
+void randarr(int arr[], int length, int seed) { //funzione randarr che prende in ingresso un array, la sua lunghezza e il seed
     
     int i;
-    srand(seed);
-    for(i=0;i<length;i++){ /*ciclo for per assegnare ad ogni elemento dell'array un valore casuale*/
-        arr[i]=rand(); /*ad arr[i] assegno un valore casuale compreso tra 0 e max*/
+    srand(seed); //srand(seed) imposta il punto di partenza per la creazione di una serie di numeri interi pseudocasuali
+    for(i=0;i<length;i++){ //ciclo for per assegnare ad ogni elemento dell'array un valore pseudocasuale
+        arr[i]=rand();
 	}
 }
 
-void insertion_sort(int arr[], int n) //funzione insertionSort che prende in ingresso l'array e la sua dimensione
+void insertion_sort(int arr[], int n) //funzione insertion sort che prende in ingresso l'array e la sua dimensione
 {
 	int i, key, j; //svolgimento classico di insertion sort, con i, j e key che si occupano del riordinamento dell'array
 	for (i = 1; i < n; i++) { //ciclo for per i che va da 1 alla dimensione dell'array con incremento di 1
@@ -26,13 +27,15 @@ void insertion_sort(int arr[], int n) //funzione insertionSort che prende in ing
 	}
 }
 
-double single_experiment(int length, int max_instances, int seed) {
+double single_experiment(int length, int max_instances, int seed) { /*single experiment riproduce l'ordinamento degli array in base all'algoritmo
+                                                                    di ordinamento selezionato. Vengono utilizzati i cicli di clock per poter comparare
+                                                                    la durata effettiva dei vari ordinamenti e delle variabili di controllo per poterli calcolare*/
     double t_start, t_end, t_elapsed, t_tot=0.0;
     for(int i=1; i<=max_instances; i++) {
         int array[length];
         randarr(array, length, seed);
         t_start=clock();
-        insertionSort(array, length);
+        insertion_sort(array, length);
         t_end=clock();
         t_elapsed=t_end-t_start;
         t_tot=t_tot+t_elapsed;
